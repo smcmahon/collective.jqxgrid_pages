@@ -1,0 +1,97 @@
+<?xml version="1.0"?>
+<!-- This file holds the setup configuration for the portal_javascripts tool.
+     -->
+<object name="portal_javascripts">
+
+ <!-- Javascript files that will be registered with the
+      portal_javascripts tool are defined here. You can also specify values
+      for existing resources if you need to modify some of their properties.
+      Javascript elements accept these parameters:
+      - 'id' (required): same rules as for stylesheets (see
+        'cssregistry.xml').
+      - 'expression' (optional - default: ''): a tal condition.
+      - 'inline' (optional - default: False)
+      - 'enabled' (optional - default: True): boolean
+      - 'cookable' (optional - default: True): boolean (aka 'merging allowed')
+      See registerScript() arguments in ResourceRegistries/tools/JSRegistry.py
+      for the latest list of all available keys and default values.
+      -->
+
+<!--
+<javascript
+    id="++resource++collective.jqxgrid_pages/jqwidgets/jqxcore.js"
+    cacheable="True" compression="none" cookable="True"
+    enabled="True" expression="python:context.restrictedTraverse("@@plone_interface_info").provides("collective.jqxgrid_pages.interfaces.IGridPage") or "++add++jqxgrid_page" in context.REQUEST.ACTUAL_URL"  inline="False" />
+<javascript
+    id="++resource++collective.jqxgrid_pages/jqwidgets/jqxdata.js"
+    cacheable="True" compression="none" cookable="True"
+    enabled="True" expression=""  inline="False" />
+<javascript
+    id="++resource++collective.jqxgrid_pages/jqwidgets/jqxbuttons.js"
+    cacheable="True" compression="none" cookable="True"
+    enabled="True" expression=""  inline="False" />
+<javascript
+    id="++resource++collective.jqxgrid_pages/jqwidgets/jqxscrollbar.js"
+    cacheable="True" compression="none" cookable="True"
+    enabled="True" expression=""  inline="False" />
+<javascript
+    id="++resource++collective.jqxgrid_pages/jqwidgets/jqxmenu.js"
+    cacheable="True" compression="none" cookable="True"
+    enabled="True" expression=""  inline="False" />
+<javascript
+    id="++resource++collective.jqxgrid_pages/jqwidgets/jqxlistbox.js"
+    cacheable="True" compression="none" cookable="True"
+    enabled="True" expression=""  inline="False" />
+<javascript
+    id="++resource++collective.jqxgrid_pages/jqwidgets/jqxdropdownlist.js"
+    cacheable="True" compression="none" cookable="True"
+    enabled="True" expression=""  inline="False" />
+<javascript
+    id="++resource++collective.jqxgrid_pages/jqwidgets/jqxgrid.js"
+    cacheable="True" compression="none" cookable="True"
+    enabled="True" expression=""  inline="False" />
+<javascript
+    id="++resource++collective.jqxgrid_pages/jqwidgets/jqxgrid.selection.js"
+    cacheable="True" compression="none" cookable="True"
+    enabled="True" expression=""  inline="False" />
+<javascript
+    id="++resource++collective.jqxgrid_pages/jqwidgets/jqxgrid.columnsresize.js"
+    cacheable="True" compression="none" cookable="True"
+    enabled="True" expression=""  inline="False" />
+<javascript
+    id="++resource++collective.jqxgrid_pages/jqwidgets/jqxgrid.filter.js"
+    cacheable="True" compression="none" cookable="True"
+    enabled="True" expression=""  inline="False" />
+<javascript
+    id="++resource++collective.jqxgrid_pages/jqwidgets/jqxgrid.sort.js"
+    cacheable="True" compression="none" cookable="True"
+    enabled="True" expression=""  inline="False" />
+<javascript
+    id="++resource++collective.jqxgrid_pages/jqwidgets/jqxgrid.pager.js"
+    cacheable="True" compression="none" cookable="True"
+    enabled="True" expression=""  inline="False" />
+<javascript
+    id="++resource++collective.jqxgrid_pages/jqwidgets/jqxgrid.grouping.js"
+    cacheable="True" compression="none" cookable="True"
+    enabled="True" expression=""  inline="False" />
+<javascript
+    id="++resource++collective.jqxgrid_pages/jqwidgets/jqxdata.export.js"
+    cacheable="True" compression="none" cookable="True"
+    enabled="True" expression=""  inline="False" />
+<javascript
+    id="++resource++collective.jqxgrid_pages/jqwidgets/jqxgrid.export.js"
+    cacheable="True" compression="none" cookable="True"
+    enabled="True" expression=""  inline="False" />
+-->
+
+<javascript
+    id="++resource++collective.jqxgrid_pages/jqwidgets/jqxgridall.js"
+    cacheable="True" compression="none" cookable="True"
+    enabled="True" expression="python:context.restrictedTraverse('@@plone_interface_info').provides('collective.jqxgrid_pages.interfaces.IGridPage') or '++add++jqxgrid_page' in context.REQUEST.ACTUAL_URL"  inline="False" />
+
+<javascript
+    id="++resource++collective.jqxgrid_pages/main.js"
+    cacheable="True" compression="safe" cookable="True"
+    enabled="True" expression="python:context.restrictedTraverse('@@plone_interface_info').provides('collective.jqxgrid_pages.interfaces.IGridPage') or '++add++jqxgrid_page' in context.REQUEST.ACTUAL_URL"  inline="False" />
+
+</object>

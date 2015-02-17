@@ -1,0 +1,31 @@
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en"
+      xmlns:tal="http://xml.zope.org/namespaces/tal"
+      xmlns:metal="http://xml.zope.org/namespaces/metal"
+      xmlns:i18n="http://xml.zope.org/namespaces/i18n"
+      lang="en"
+      metal:use-macro="context/main_template/macros/master"
+      i18n:domain="collective.jqxgrid_pages">
+<body>
+
+<metal:content-core fill-slot="content-core">
+    <metal:content-core define-macro="content-core">
+
+        <div style="display:none">
+            <div id="data_source" tal:content="context/data_source" />
+            <div id="data_type" tal:content="context/data_type" />
+            <div id="data_definition" tal:content="context/data_definition" />
+            <div id="column_definition" tal:content="context/column_definition" />
+            <div id="display_options" tal:content="python:','.join(context.display_options)" />
+        </div>
+
+        <div tal:content="structure context/prologue/output" />
+
+        <div id="jqxgrid">Grid Here</div>
+
+        <div tal:content="structure context/epilogue/output" />
+
+    </metal:content-core>
+</metal:content-core>
+
+</body>
+</html>

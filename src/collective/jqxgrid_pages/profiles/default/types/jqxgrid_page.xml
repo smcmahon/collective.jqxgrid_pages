@@ -1,0 +1,102 @@
+<?xml version="1.0"?>
+<object name="jqxgrid_page" meta_type="Dexterity FTI" i18n:domain="plone"
+   xmlns:i18n="http://xml.zope.org/namespaces/i18n">
+ <property name="title" i18n:translate="">Grid Page</property>
+ <property name="description"
+    i18n:translate="">Provides a grid view of remote data.</property>
+ <property name="icon_expr">string:${portal_url}/document_icon.png</property>
+ <property name="factory">jqxgrid_page</property>
+ <property
+    name="add_view_expr">string:${folder_url}/++add++jqxgrid_page</property>
+ <property name="link_target"></property>
+ <property name="immediate_view">view</property>
+ <property name="global_allow">True</property>
+ <property name="filter_content_types">True</property>
+ <property name="allowed_content_types"/>
+ <property name="allow_discussion">False</property>
+ <property name="default_view">view</property>
+ <property name="view_methods">
+  <element value="view"/>
+ </property>
+ <property name="default_view_fallback">False</property>
+ <property name="add_permission">cmf.AddPortalContent</property>
+ <property name="klass">collective.jqxgrid_pages.content.GridPage</property>
+ <property name="behaviors">
+  <element value="plone.app.dexterity.behaviors.metadata.IDublinCore"/>
+  <element value="plone.app.content.interfaces.INameFromTitle"/>
+  <element
+     value="collective.dexteritytextindexer.behavior.IDexterityTextIndexer"/>
+  <element
+     value="plone.app.dexterity.behaviors.nextprevious.INextPreviousEnabled"/>
+  <element
+     value="plone.app.dexterity.behaviors.nextprevious.INextPreviousToggle"/>
+ </property>
+ <property name="schema"></property>
+ <property
+    name="model_source">&lt;model xmlns:i18n="http://xml.zope.org/namespaces/i18n" xmlns:security="http://namespaces.plone.org/supermodel/security" xmlns:marshal="http://namespaces.plone.org/supermodel/marshal" xmlns:form="http://namespaces.plone.org/supermodel/form" xmlns:indexer="http://namespaces.plone.org/supermodel/indexer" xmlns="http://namespaces.plone.org/supermodel/schema"&gt;
+    &lt;schema&gt;
+      &lt;field name="prologue" type="plone.app.textfield.RichText"&gt;
+        &lt;description&gt;Displays before grid.&lt;/description&gt;
+        &lt;required&gt;False&lt;/required&gt;
+        &lt;title&gt;Prologue&lt;/title&gt;
+      &lt;/field&gt;
+      &lt;field name="data_source" type="zope.schema.TextLine"&gt;
+        &lt;description&gt;URL of the data source.&lt;/description&gt;
+        &lt;title&gt;Data Source&lt;/title&gt;
+      &lt;/field&gt;
+      &lt;field name="data_type" type="zope.schema.Choice"&gt;
+        &lt;description&gt;Type of the data supplied by the source. Note that data from other servers may only be JSONP.&lt;/description&gt;
+        &lt;title&gt;Data Type&lt;/title&gt;
+        &lt;values&gt;
+          &lt;element&gt;XML&lt;/element&gt;
+          &lt;element&gt;JSON&lt;/element&gt;
+          &lt;element&gt;JSONP&lt;/element&gt;
+          &lt;element&gt;CSV&lt;/element&gt;
+          &lt;element&gt;TSV&lt;/element&gt;
+        &lt;/values&gt;
+      &lt;/field&gt;
+      &lt;field name="data_definition" type="zope.schema.Text"&gt;
+        &lt;description&gt;Description of the incoming data.&lt;/description&gt;
+        &lt;title&gt;Data Definition&lt;/title&gt;
+      &lt;/field&gt;
+      &lt;field name="column_definition" type="zope.schema.Text"&gt;
+        &lt;description&gt;Description of the columns to show on the grid.&lt;/description&gt;
+        &lt;title&gt;Column Definition&lt;/title&gt;
+      &lt;/field&gt;
+      &lt;field name="display_options" type="zope.schema.Set"&gt;
+        &lt;description&gt;Optional features for the displayed grid.&lt;/description&gt;
+        &lt;required&gt;False&lt;/required&gt;
+        &lt;title&gt;Display Options&lt;/title&gt;
+        &lt;value_type type="zope.schema.Choice"&gt;
+          &lt;values&gt;
+            &lt;element&gt;Sortable columns&lt;/element&gt;
+            &lt;element&gt;Filterable columns&lt;/element&gt;
+            &lt;element&gt;Paged&lt;/element&gt;
+            &lt;element&gt;Exportable&lt;/element&gt;
+          &lt;/values&gt;
+        &lt;/value_type&gt;
+      &lt;/field&gt;
+      &lt;field name="epilogue" type="plone.app.textfield.RichText"&gt;
+        &lt;description&gt;Displays after grid.&lt;/description&gt;
+        &lt;required&gt;False&lt;/required&gt;
+        &lt;title&gt;Epilogue&lt;/title&gt;
+      &lt;/field&gt;
+    &lt;/schema&gt;
+  &lt;/model&gt;</property>
+ <property name="model_file"></property>
+ <property name="schema_policy">dexterity</property>
+ <alias from="(Default)" to="(dynamic view)"/>
+ <alias from="edit" to="@@edit"/>
+ <alias from="sharing" to="@@sharing"/>
+ <alias from="view" to="(selected layout)"/>
+ <action title="View" action_id="view" category="object" condition_expr=""
+    description="" icon_expr="" link_target="" url_expr="string:${object_url}"
+    visible="True">
+  <permission value="View"/>
+ </action>
+ <action title="Edit" action_id="edit" category="object" condition_expr=""
+    description="" icon_expr="" link_target=""
+    url_expr="string:${object_url}/edit" visible="True">
+  <permission value="Modify portal content"/>
+ </action>
+</object>

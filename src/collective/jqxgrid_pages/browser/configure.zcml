@@ -1,0 +1,29 @@
+<configure
+    xmlns="http://namespaces.zope.org/zope"
+    xmlns:browser="http://namespaces.zope.org/browser"
+    xmlns:plone="http://namespaces.plone.org/plone"
+    i18n_domain="collective.jqxgrid_pages">
+
+    <!-- Set overrides folder for Just-a-Bunch-Of-Templates product -->
+    <include package="z3c.jbot" file="meta.zcml" />
+    <browser:jbot
+        directory="overrides"
+        layer="collective.jqxgrid_pages.interfaces.ICollectiveJqxgridPagesLayer"
+        />
+
+    <!-- Publish static files -->
+    <browser:resourceDirectory
+        name="collective.jqxgrid_pages"
+        directory="static"
+        />
+
+    <browser:page
+        name="view"
+        for="collective.jqxgrid_pages.interfaces.IGridPage"
+        class=".views.GridView"
+        template="templates/grid_view.pt"
+        layer="collective.jqxgrid_pages.interfaces.ICollectiveJqxgridPagesLayer"
+        permission="zope2.View"
+        />
+
+</configure>
