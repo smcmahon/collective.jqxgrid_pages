@@ -11,18 +11,20 @@
     <metal:content-core define-macro="content-core">
 
         <div style="display:none">
-            <div id="data_source" tal:content="context/data_source" />
-            <div id="data_type" tal:content="context/data_type" />
-            <div id="data_definition" tal:content="context/data_definition" />
-            <div id="column_definition" tal:content="context/column_definition" />
+            <div id="data_source" tal:content="structure context/data_source" />
+            <div id="data_type" tal:content="structure context/data_type" />
+            <div id="data_definition" tal:content="structure context/data_definition" />
+            <div id="data_root" tal:content="structure context/data_root" />
+            <div id="data_record" tal:content="structure context/data_record" />
+            <div id="column_definition" tal:content="structure context/column_definition" />
             <div id="display_options" tal:content="python:','.join(context.display_options)" />
         </div>
 
-        <div tal:content="structure context/prologue/output" />
+        <div tal:content="structure context/prologue/output | nothing" />
 
         <div id="jqxgrid">Grid Here</div>
 
-        <div tal:content="structure context/epilogue/output" />
+        <div tal:content="structure context/epilogue/output | nothing" />
 
     </metal:content-core>
 </metal:content-core>
