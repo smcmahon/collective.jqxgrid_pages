@@ -1,63 +1,7 @@
 jQuery(function ($) {
 
-    // console.log(data_source);
-    // console.log(data_type);
-    // console.log(data_definition);
-    // console.log(column_definition);
-    // console.log(display_options);
-
-    // var jqxhr;
-
-    // if (data_source === 'json') {
-    //     jqxhr = $.getJSON(data_source);
-    // } else {
-    //     jqxhr = $.get(data_source);
-    // }
-
-    // jqxhr.done(function(data) {
-    //     console.log( "success" );
-    //     console.log(data);
-
-    //     var data_adapter;
-
-    //     if ($("#jqxgrid")) {
-
-    //         data_adapter = new $.jqx.dataAdapter({
-    //             datatype: data_type,
-    //             datafields: data_definition,
-    //             url: "http://192.168.1.6:7080/Plone/sample.xml",
-    //             // localdata: data,
-    //             root: "entry",
-    //             record: "content",
-    //             id: "m\\:properties>d\\:CustomerID"
-    //             });
-
-    //         $("#jqxgrid").jqxGrid({
-    //             width: 850,
-    //             source: data_adapter,
-    //             sortable: display_options.search('Sortable') >= 0,
-    //             filterable: display_options.search('Filter') >= 0,
-    //             pageable: display_options.search('Paged') >= 0,
-    //             autoheight: true,
-    //             columnsresize: true,
-    //             columns: column_definition
-    //             });
-    //     }
-    // });
-
-    // jqxhr.fail(function( jqxhr, textStatus, error ) {
-    //     var err = textStatus + ", " + error;
-
-    //     alert( "Request Failed: " + err );
-    //     console.log( "Request Failed: " + err );
-    // });
-
-    // jqxhr.complete(function (data) {
-    //     console.log('complete');
-    //     console.log(data);
-    // });
-
-    if ($("#jqxgrid")) {
+    // construct grid
+    if ($("#jqxgrid").length) {
         var data_source = $('#data_source').text(),
             data_type = $('#data_type').text().toLowerCase(),
             data_record = $('#data_record').text(),
@@ -68,6 +12,12 @@ jQuery(function ($) {
             data_spec,
             data_adapter,
             jqxgrid_options;
+
+        // console.log(data_source);
+        // console.log(data_type);
+        // console.log(data_definition);
+        // console.log(column_definition);
+        // console.log(display_options);
 
         try {
             data_definition = $.parseJSON(data_definition);
@@ -83,7 +33,7 @@ jQuery(function ($) {
         }
 
         jqxgrid_options = {
-            width: 850,
+            width: "100%",
             sortable: display_options.search('Sortable') >= 0,
             filterable: display_options.search('Filter') >= 0,
             pageable: display_options.search('Paged') >= 0,
@@ -125,5 +75,19 @@ jQuery(function ($) {
             $("#jqxgrid").jqxGrid(jqxgrid_options);
         }
     }
+
+
+    if ($("body.template-edit.portaltype-jqxgrid_page").length) {
+        $("#form-widgets-data_type").change(function(event) {
+            var controls = $("#formfield-form-widgets-data_root, #formfield-form-widgets-data_record");
+
+            if($("#form-widgets-data_type").val() === 'XML') {
+                controls.fadeIn();
+            } else {
+                controls.fadeOut();
+            }
+        });
+    }
+
 });
 
