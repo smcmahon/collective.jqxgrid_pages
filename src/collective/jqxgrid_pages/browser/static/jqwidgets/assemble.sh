@@ -13,3 +13,5 @@ cat jqxgrid.sort.js >> jqxgridall.js
 cat jqxgrid.pager.js >> jqxgridall.js
 cat jqxgrid.grouping.js >> jqxgridall.js
 cat jqxgrid.edit.js >> jqxgridall.js
+cat jqxdata.export.js >> jqxgridall.js
+cat jqxgrid.export.js >> jqxgridall.js

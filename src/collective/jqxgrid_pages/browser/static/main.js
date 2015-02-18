@@ -76,8 +76,15 @@ jQuery(function ($) {
         }
     }
 
-
+    // edit form fiddling
     if ($("body.template-edit.portaltype-jqxgrid_page").length) {
+        var target,
+            target_value,
+            data,
+            ddgrid,
+            updateDataDefinition;
+
+        // toggle display of xml-specific fields
         $("#form-widgets-data_type").change(function(event) {
             var controls = $("#formfield-form-widgets-data_root, #formfield-form-widgets-data_record");
 
@@ -86,6 +93,92 @@ jQuery(function ($) {
             } else {
                 controls.fadeOut();
             }
+        });
+
+        target = $("#form-widgets-data_definition");
+        target.after('<div id="data_definition_grid"></div>');
+        target_value = target.val();
+        if (target_value.length === 0) {
+            target_value = "[]";
+        }
+        try {
+            data = $.parseJSON(target_value);
+        } catch(err) {
+            alert("Unable to parse Data Definition: " + err.message);
+            return;
+        }
+        ddgrid = $("#data_definition_grid");
+        ddgrid.jqxGrid({
+            width: "100%",
+            autoheight: true,
+            columnsresize: true,
+            editable: true,
+            showtoolbar: true,
+            rendertoolbar: function (toolbar) {
+                var container,
+                    addrowbutton,
+                    deleterowbutton;
+
+                    container = $("<div style='margin: 5px;'></div>");
+                    toolbar.append(container);
+                    container.append('<input id="addrowbutton" type="button" value="Add New Row" />');
+                    container.append('<input style="margin-left: 5px;" id="deleterowbutton" type="button" value="Delete Selected Row" />');
+
+                    addrowbutton = $("#addrowbutton");
+                    addrowbutton.jqxButton();
+                    addrowbutton.on('click', function () {
+                        ddgrid.jqxGrid(
+                            'addrow',
+                            null,
+                            {
+                                name: '',
+                                type: 'string',
+                                mapping: ''
+                            }
+                        );
+                    });
+
+                    deleterowbutton = $("#deleterowbutton");
+                    deleterowbutton.jqxButton();
+                    deleterowbutton.on('click', function () {
+                        var selectedrowindex = ddgrid.jqxGrid('getselectedrowindex'),
+                            rowscount = ddgrid.jqxGrid('getdatainformation').rowscount;
+
+                        if (selectedrowindex >= 0 && selectedrowindex < rowscount) {
+                            var id = ddgrid.jqxGrid('getrowid', selectedrowindex),
+                                commit = ddgrid.jqxGrid('deleterow', id);
+                        }
+                    });
+                },
+            source: new $.jqx.dataAdapter({
+                datafields: [
+                    {name: 'name', type: 'string'},
+                    {name: 'type', type: 'string'},
+                    {name: 'mapping', type: 'string'}
+                    ],
+                datatype: 'json',
+                localdata: data,
+                addrow: function (rowid, rowdata, position, commit) {
+                    commit(true);
+                    },
+                deleterow: function (rowid, commit) {
+                    commit(true);
+                    updateDataDefinition();
+                    }
+                }),
+            columns: [
+                {text: 'Title', datafield: 'name', width: 250 },
+                {text: 'Data Type', datafield: 'type', width: 250},
+                {text: 'Mapping', datafield: 'mapping', width: 250 }
+                ]
+        });
+
+        updateDataDefinition = function () {
+            $("#form-widgets-data_definition")
+                .text(ddgrid.jqxGrid('exportdata', 'json'));
+        };
+        ddgrid.on('cellvaluechanged', function (event) {
+            updateDataDefinition();
         });
     }
 
