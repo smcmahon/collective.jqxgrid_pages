@@ -77,12 +77,8 @@ jQuery(function ($) {
     }
 
     // edit form fiddling
-    if ($("body.template-edit.portaltype-jqxgrid_page").length) {
-        var target,
-            target_value,
-            data,
-            ddgrid,
-            updateDataDefinition;
+    if ($("#form-widgets-data_definition").length) {
+        var addGridForField;
 
         // toggle display of xml-specific fields
         $("#form-widgets-data_type").change(function(event) {
@@ -95,91 +91,185 @@ jQuery(function ($) {
             }
         });
 
-        target = $("#form-widgets-data_definition");
-        target.after('<div id="data_definition_grid"></div>');
-        target_value = target.val();
-        if (target_value.length === 0) {
-            target_value = "[]";
-        }
-        try {
-            data = $.parseJSON(target_value);
-        } catch(err) {
-            alert("Unable to parse Data Definition: " + err.message);
-            return;
-        }
-        ddgrid = $("#data_definition_grid");
-        ddgrid.jqxGrid({
-            width: "100%",
-            autoheight: true,
-            columnsresize: true,
-            editable: true,
-            showtoolbar: true,
-            rendertoolbar: function (toolbar) {
-                var container,
-                    addrowbutton,
-                    deleterowbutton;
+        // function to build a grid field from a text field
+        // and keep the text field updated.
+        addGridForField = function (
+                target_selector,
+                grid_id,
+                datafields,
+                columns,
+                null_row)
+        {
+            var target,
+                target_value,
+                data,
+                ddgrid,
+                updateDataDefinition;
 
-                    container = $("<div style='margin: 5px;'></div>");
-                    toolbar.append(container);
-                    container.append('<input id="addrowbutton" type="button" value="Add New Row" />');
-                    container.append('<input style="margin-left: 5px;" id="deleterowbutton" type="button" value="Delete Selected Row" />');
+            target = $(target_selector);
+            target.after('<div id="' + grid_id + '"></div>');
+            target_value = target.val();
+            if (target_value.length === 0) {
+                target_value = "[]";
+            }
+            try {
+                data = $.parseJSON(target_value);
+            } catch(err) {
+                alert("Unable to parse JSON: " + err.message);
+                return;
+            }
+            // jqxGrid fails if 'map' is used as the name of
+            // a datafield. So, convert all 'map' properties
+            // to 'mapping'. This gets reversed on export.
+            $.each(data, function (index, value) {
+                if (value.hasOwnProperty('map')) {
+                    value['mapping'] = value['map'];
+                    delete value['map'];
+                }
+            });
 
-                    addrowbutton = $("#addrowbutton");
-                    addrowbutton.jqxButton();
-                    addrowbutton.on('click', function () {
-                        ddgrid.jqxGrid(
-                            'addrow',
-                            null,
-                            {
-                                name: '',
-                                type: 'string',
-                                mapping: ''
+            ddgrid = $("#" + grid_id);
+            ddgrid.jqxGrid({
+                width: "80%",
+                autoheight: true,
+                columnsresize: true,
+                editable: true,
+                showtoolbar: true,
+                rendertoolbar: function (toolbar) {
+                    var container,
+                        addrowbutton,
+                        deleterowbutton;
+
+                        container = $("<div style='margin: 5px;'></div>");
+                        toolbar.append(container);
+                        container.append('<input id="' + grid_id + '_addrowbutton" type="button" value="Add New Row" />');
+                        container.append('<input style="margin-left: 5px;" id="' + grid_id + '_deleterowbutton" type="button" value="Delete Selected Row" />');
+
+                        addrowbutton = $("#" + grid_id + "_addrowbutton");
+                        addrowbutton.jqxButton();
+                        addrowbutton.on('click', function () {
+                            ddgrid.jqxGrid(
+                                'addrow',
+                                null,
+                                null_row
+                            );
+                        });
+
+                        deleterowbutton = $("#" + grid_id + "_deleterowbutton");
+                        deleterowbutton.jqxButton();
+                        deleterowbutton.on('click', function () {
+                            var selectedrowindex = ddgrid.jqxGrid('getselectedrowindex'),
+                                rowscount = ddgrid.jqxGrid('getdatainformation').rowscount;
+
+                            if (selectedrowindex >= 0 && selectedrowindex < rowscount) {
+                                var id = ddgrid.jqxGrid('getrowid', selectedrowindex),
+                                    commit = ddgrid.jqxGrid('deleterow', id);
                             }
-                        );
-                    });
-
-                    deleterowbutton = $("#deleterowbutton");
-                    deleterowbutton.jqxButton();
-                    deleterowbutton.on('click', function () {
-                        var selectedrowindex = ddgrid.jqxGrid('getselectedrowindex'),
-                            rowscount = ddgrid.jqxGrid('getdatainformation').rowscount;
-
-                        if (selectedrowindex >= 0 && selectedrowindex < rowscount) {
-                            var id = ddgrid.jqxGrid('getrowid', selectedrowindex),
-                                commit = ddgrid.jqxGrid('deleterow', id);
-                        }
-                    });
-                },
-            source: new $.jqx.dataAdapter({
-                datafields: [
-                    {name: 'name', type: 'string'},
-                    {name: 'type', type: 'string'},
-                    {name: 'mapping', type: 'string'}
-                    ],
-                datatype: 'json',
-                localdata: data,
-                addrow: function (rowid, rowdata, position, commit) {
-                    commit(true);
+                        });
                     },
-                deleterow: function (rowid, commit) {
-                    commit(true);
-                    updateDataDefinition();
-                    }
-                }),
-            columns: [
-                {text: 'Title', datafield: 'name', width: 250 },
-                {text: 'Data Type', datafield: 'type', width: 250},
-                {text: 'Mapping', datafield: 'mapping', width: 250 }
-                ]
-        });
+                source: new $.jqx.dataAdapter({
+                    datafields: datafields,
+                    datatype: 'json',
+                    localdata: data,
+                    addrow: function (rowid, rowdata, position, commit) {
+                        commit(true);
+                        },
+                    deleterow: function (rowid, commit) {
+                        commit(true);
+                        updateDataDefinition();
+                        }
+                    }),
+                columns: columns
+            });
 
-        updateDataDefinition = function () {
-            $("#form-widgets-data_definition")
-                .text(ddgrid.jqxGrid('exportdata', 'json'));
-        };
-        ddgrid.on('cellvaluechanged', function (event) {
-            updateDataDefinition();
-        });
+            updateDataDefinition = function () {
+                var data = ddgrid.jqxGrid('getrows');
+
+                // reverse the map/mapping adjustment
+                $(target_selector)
+                    .text(JSON.stringify(data).replace(/"mapping"/g, '"map"'));
+            };
+            ddgrid.on('cellvaluechanged', function (event) {
+                updateDataDefinition();
+            });
+
+            $(target_selector).hide();
+
+        }; // addGridForField
+
+        addGridForField(
+            "#form-widgets-data_definition",
+            "data_definition_grid",
+            [
+                {name: 'name', type: 'string'},
+                {name: 'type', type: 'string'},
+                {name: 'mapping', type: 'string'}
+            ],
+            [
+                {text: 'Field Name', datafield: 'name', width: 250 },
+                {
+                    text: 'Data Type',
+                    datafield: 'type',
+                    width: 90,
+                    columntype: 'dropdownlist',
+                    createeditor: function (row, value, editor) {
+                        editor.jqxDropDownList({source:
+                            [
+                                'string',
+                                'date',
+                                'number',
+                                'int',
+                                'float',
+                                'bool'
+                            ]});
+                    }
+                },
+                {text: 'Mapping', datafield: 'mapping', width: 250}
+            ],
+            {
+                name: '',
+                type: 'string',
+                mapping: ''
+            }
+        );
+        addGridForField(
+            "#form-widgets-column_definition",
+            "columns_grid",
+            [
+                {name: 'text', type: 'string'},
+                {name: 'datafield', type: 'string'},
+                {name: 'width', type: 'string'},
+                {name: 'cellsalign', type: 'string'},
+                {name: 'cellsformat', type: 'string'}
+
+            ],
+            [
+                {text: 'Title', datafield: 'text', width: 250 },
+                {text: 'Field Name', datafield: 'datafield', width: 250},
+                {text: 'Column Width', datafield: 'width', width: 80},
+                {
+                    text: 'Align',
+                    datafield: 'cellsalign',
+                    columntype: 'dropdownlist',
+                    createeditor: function (row, value, editor) {
+                        editor.jqxDropDownList({source:
+                            [
+                                'left',
+                                'center',
+                                'right'
+                            ]});
+                    },
+                    width: 80
+                },
+                {text: 'Format', datafield: 'cellsformat', width: 80}
+            ],
+            {
+                text: '',
+                datafield: '',
+                cellsalign: 'left'
+            }
+        );
+
     }
 
 });

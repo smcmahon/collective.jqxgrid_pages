@@ -22,7 +22,7 @@
 
         <div tal:content="structure context/prologue/output | nothing" />
 
-        <div id="jqxgrid">Grid Here</div>
+        <div id="jqxgrid">Data</div>
 
         <div tal:content="structure context/epilogue/output | nothing" />
 
