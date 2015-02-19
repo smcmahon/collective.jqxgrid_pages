@@ -24,6 +24,21 @@
 
         <div id="jqxgrid">Data</div>
 
+        <div tal:condition="python: 'Exportable' in context.display_options">
+            <form id="export_form" style="margin-top: 0.25em">
+                <input type="submit" value="Export Data" clas="submit-widget button-field context" />
+                <label for="export_format">Format</label>
+                <select id="export_format">
+                    <option selected="selected" value="xls">Excel</option>
+                    <option value="html">HTML</option>
+                    <option value="xml">XML</option>
+                    <option value="tsv">Tab-delimited</option>
+                    <option value="csv">Comma separated values</option>
+                </select>
+            </form>
+        </div>
+
+
         <div tal:content="structure context/epilogue/output | nothing" />
 
     </metal:content-core>

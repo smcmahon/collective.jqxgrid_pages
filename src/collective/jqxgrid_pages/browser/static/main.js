@@ -74,6 +74,14 @@ jQuery(function ($) {
             jqxgrid_options['source'] = data_adapter;
             $("#jqxgrid").jqxGrid(jqxgrid_options);
         }
+
+        $("#export_form").submit(function (event) {
+            var format = $("#export_format").val();
+
+            event.preventDefault();
+            $("#jqxgrid").jqxGrid('exportdata', format, "export");
+        });
+
     }
 
     // edit form fiddling
