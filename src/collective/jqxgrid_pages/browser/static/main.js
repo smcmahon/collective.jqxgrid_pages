@@ -13,12 +13,6 @@ jQuery(function ($) {
             data_adapter,
             jqxgrid_options;
 
-        // console.log(data_source);
-        // console.log(data_type);
-        // console.log(data_definition);
-        // console.log(column_definition);
-        // console.log(display_options);
-
         try {
             data_definition = $.parseJSON(data_definition);
         } catch(err) {
@@ -37,7 +31,7 @@ jQuery(function ($) {
             sortable: display_options.search('Sortable') >= 0,
             filterable: display_options.search('Filter') >= 0,
             pageable: display_options.search('Paged') >= 0,
-            autoheight: true,
+            autoheight: display_options.search('Height') >= 0,
             columnsresize: true,
             columns: column_definition
             };
@@ -278,7 +272,29 @@ jQuery(function ($) {
             }
         );
 
-    }
+        var display_options_select = $("#form-widgets-display_options"),
+            display_options_jqxlist = $('<div id="display_options_jqxlist">Options</div>');
+
+        display_options_select.hide().after(display_options_jqxlist);
+        display_options_jqxlist.jqxListBox({height: 125, checkboxes: true});
+        display_options_jqxlist.jqxListBox('loadFromSelect', "form-widgets-display_options");
+
+        $("#content-core form").submit(function (event) {
+            var checked = {};
+
+            $.each(display_options_jqxlist.jqxListBox('getCheckedItems'), function () {
+                checked[this.value] = 1;
+            });
+
+            display_options_select.children("option").each(function () {
+                var jqt = $(this);
+
+                jqt.attr('selected', checked.hasOwnProperty(jqt.val()));
+            });
+        });
+
+
+    } // if on edit view
 
 });
 

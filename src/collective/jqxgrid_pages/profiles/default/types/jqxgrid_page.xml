@@ -84,6 +84,7 @@
             &lt;element&gt;Filterable columns&lt;/element&gt;
             &lt;element&gt;Paged&lt;/element&gt;
             &lt;element&gt;Exportable&lt;/element&gt;
+            &lt;element&gt;Auto Height&lt;/element&gt;
           &lt;/values&gt;
         &lt;/value_type&gt;
       &lt;/field&gt;
