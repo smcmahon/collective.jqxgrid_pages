@@ -20,3 +20,28 @@ See http://www.jqwidgets.com/license/.
 Python and XML components are licensed under the GPL, v 2.
 
 The development of this package was sponsored by the University of California Division of Social Sciences.
+
+Example
+=======
+
+Try the following JSONP example:
+
+Data source: http://jsonplaceholder.typicode.com/posts
+
+Data type: JSONP
+
+Data definition::
+
+    userId, string
+    id, string
+    title, string
+    body, string
+
+Column definition::
+
+    User Id, userId
+    ID, id
+    Title, title
+    Body, body
+
+
