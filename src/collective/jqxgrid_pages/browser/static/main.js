@@ -1,6 +1,6 @@
 jQuery(function ($) {
 
-    // construct grid
+    // construct grid on "view" pages.
     if ($("#jqxgrid").length) {
         var data_source = $('#data_source').text(),
             data_type = $('#data_type').text().toLowerCase(),
@@ -13,6 +13,9 @@ jQuery(function ($) {
             data_adapter,
             jqxgrid_options;
 
+        // Our data definition and column defs are drawn from text
+        // fields that should contain JSON in strings.
+        // Convert to array of JS objects.
         try {
             data_definition = $.parseJSON(data_definition);
         } catch(err) {
@@ -26,6 +29,7 @@ jQuery(function ($) {
             return;
         }
 
+        // Baseline grid options used for all sources.
         jqxgrid_options = {
             width: "100%",
             sortable: display_options.search('Sortable') >= 0,
@@ -36,9 +40,12 @@ jQuery(function ($) {
             columns: column_definition
             };
 
+        // The url mechanism for jsonp is not working (or I don't know how to
+        // use it).
+        // So, let's gather the remote data ourselves.
+        // Since AJAX is async, we need to create the grid in the
+        // success callback.
         if (data_type === 'jsonp') {
-            // the url mechanism for jsonp is not working (or I don't know how to
-            // use it).
 
             $.getJSON(data_source)
                 .done(function (data) {
@@ -55,6 +62,8 @@ jQuery(function ($) {
                     alert( "Request Failed: " + textStatus + ", " + error );
                     });
         } else {
+            // Our data has a source that the jqx data adapter can
+            // handle.
             data_spec = {
                 datafields: data_definition,
                 datatype: data_type,
@@ -69,6 +78,7 @@ jQuery(function ($) {
             $("#jqxgrid").jqxGrid(jqxgrid_options);
         }
 
+        // export button callback
         $("#export_form").submit(function (event) {
             var format = $("#export_format").val();
 
@@ -78,7 +88,8 @@ jQuery(function ($) {
 
     }
 
-    // edit form fiddling
+    // Set up the edit form, using the nice jqwidgets
+    // for data and column def and checkbox multiselect for options.
     if ($("#form-widgets-data_definition").length) {
         var addGridForField;
 
@@ -95,6 +106,8 @@ jQuery(function ($) {
 
         // function to build a grid field from a text field
         // and keep the text field updated.
+        // We'll use this for both the data and column def fields.
+        // null_row is used as data when we add a new row.
         addGridForField = function (
                 target_selector,
                 grid_id,
@@ -108,9 +121,13 @@ jQuery(function ($) {
                 ddgrid,
                 updateDataDefinition;
 
+            // find our textarea field -- which contains JSON in a string.
+            // add the jqxgrid after it and hide the original field.
             target = $(target_selector);
             target.after('<div id="' + grid_id + '"></div>');
             target_value = target.val();
+
+            // get the json string and convert to array of js objects
             if (target_value.length === 0) {
                 target_value = "[]";
             }
@@ -120,6 +137,8 @@ jQuery(function ($) {
                 alert("Unable to parse JSON: " + err.message);
                 return;
             }
+
+            // Fixup:
             // jqxGrid fails if 'map' is used as the name of
             // a datafield. So, convert all 'map' properties
             // to 'mapping'. This gets reversed on export.
@@ -130,6 +149,17 @@ jQuery(function ($) {
                 }
             });
 
+            // convenience function to
+            // move data from grid back to the original textarea field
+            updateDataDefinition = function () {
+                var data = ddgrid.jqxGrid('getrows');
+
+                // reverse the map/mapping adjustment
+                $(target_selector)
+                    .text(JSON.stringify(data).replace(/"mapping"/g, '"map"'));
+            };
+
+            // create the grid
             ddgrid = $("#" + grid_id);
             ddgrid.jqxGrid({
                 width: "80%",
@@ -138,6 +168,7 @@ jQuery(function ($) {
                 editable: true,
                 showtoolbar: true,
                 rendertoolbar: function (toolbar) {
+                    // create a toolbar with add and delete row buttons
                     var container,
                         addrowbutton,
                         deleterowbutton;
@@ -184,13 +215,6 @@ jQuery(function ($) {
                 columns: columns
             });
 
-            updateDataDefinition = function () {
-                var data = ddgrid.jqxGrid('getrows');
-
-                // reverse the map/mapping adjustment
-                $(target_selector)
-                    .text(JSON.stringify(data).replace(/"mapping"/g, '"map"'));
-            };
             ddgrid.on('cellvaluechanged', function (event) {
                 updateDataDefinition();
             });
@@ -199,6 +223,7 @@ jQuery(function ($) {
 
         }; // addGridForField
 
+        // create data definition grid.
         addGridForField(
             "#form-widgets-data_definition",
             "data_definition_grid",
@@ -234,6 +259,8 @@ jQuery(function ($) {
                 mapping: ''
             }
         );
+
+        // create grid for column definitions
         addGridForField(
             "#form-widgets-column_definition",
             "columns_grid",
@@ -272,6 +299,9 @@ jQuery(function ($) {
             }
         );
 
+        // jqwidget gives us a checkbox multiple select.
+        // Let's use it to handle the display options.
+        // options are loaded from the select field in the form.
         var display_options_select = $("#form-widgets-display_options"),
             display_options_jqxlist = $('<div id="display_options_jqxlist">Options</div>');
 
@@ -279,6 +309,8 @@ jQuery(function ($) {
         display_options_jqxlist.jqxListBox({height: 125, checkboxes: true});
         display_options_jqxlist.jqxListBox('loadFromSelect', "form-widgets-display_options");
 
+        // when form is submitted, copy options back to the original
+        // select field.
         $("#content-core form").submit(function (event) {
             var checked = {};
 
