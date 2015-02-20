@@ -45,7 +45,10 @@
         &lt;title&gt;Data Source&lt;/title&gt;
       &lt;/field&gt;
       &lt;field name="data_type" type="zope.schema.Choice"&gt;
-        &lt;description&gt;Type of the data supplied by the source. Note that data from other servers may only be JSONP.&lt;/description&gt;
+        &lt;description&gt;
+            Type of the data supplied by the source.
+            Note that data from other servers may only be JSONP.
+        &lt;/description&gt;
         &lt;title&gt;Data Type&lt;/title&gt;
         &lt;default&gt;XML&lt;/default&gt;
         &lt;values&gt;
@@ -57,7 +60,13 @@
         &lt;/values&gt;
       &lt;/field&gt;
       &lt;field name="data_definition" type="zope.schema.Text"&gt;
-        &lt;description&gt;Description of the incoming data.&lt;/description&gt;
+        &lt;description&gt;
+            Description of the incoming data.
+            For JSON sources, the field name should be the attribute
+            name for the field. For CSV and TSV, only the order matters.
+            Mappings are mainly useful for choosing XML properties.
+            See the jqxGrid documentation.
+        &lt;/description&gt;
         &lt;title&gt;Data Definition&lt;/title&gt;
       &lt;/field&gt;
       &lt;field name="data_root" type="zope.schema.TextLine"&gt;
@@ -71,11 +80,20 @@
         &lt;required&gt;False&lt;/required&gt;
       &lt;/field&gt;
       &lt;field name="column_definition" type="zope.schema.Text"&gt;
-        &lt;description&gt;Description of the columns to show on the grid.&lt;/description&gt;
+        &lt;description&gt;
+            Description of the columns to show on the grid.
+            Field names should match the data definition.
+            Column widths may be percentages or whole numbers.
+            Whole numbers are interpreted as pixels.
+        &lt;/description&gt;
         &lt;title&gt;Column Definition&lt;/title&gt;
       &lt;/field&gt;
       &lt;field name="display_options" type="zope.schema.Set"&gt;
-        &lt;description&gt;Optional features for the displayed grid.&lt;/description&gt;
+        &lt;description&gt;
+            Optional features for the displayed grid.
+            Grids are fixed-height unless you choose 'Auto Height',
+            which adjusts to grid height to display all rows.
+        &lt;/description&gt;
         &lt;required&gt;False&lt;/required&gt;
         &lt;title&gt;Display Options&lt;/title&gt;
         &lt;value_type type="zope.schema.Choice"&gt;

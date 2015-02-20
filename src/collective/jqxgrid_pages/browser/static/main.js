@@ -1,5 +1,29 @@
 jQuery(function ($) {
 
+    var format_help =
+'    <div id="format_help_trigger" style="cursor:pointer"><a href="#">Format Help +/-</a></div>\n' +
+'    <div id="format_help" style="white-space:pre-wrap; display:none; font-weight:normal">' +
+'<strong>Number formats</strong>\n' +
+'    "d" - decimal numbers.\n' +
+'    "f" - floating-point numbers.\n' +
+'    "n" - integer numbers.\n' +
+'    "c" - currency numbers.\n' +
+'    "p" - percentage numbers.\n' +
+'For adding decimal places to the numbers, add a number after the formatting string.\n' +
+'For example: "c3" displays a number in this format $25.256\n' +
+'\n' +
+'<strong>Date formats</strong>\n' +
+'    short date pattern d: "M/d/yyyy",\n' +
+'    long date pattern D: "dddd, MMMM dd, yyyy",\n' +
+'    short time pattern t: "h:mm tt",\n' +
+'    long time pattern T: "h:mm:ss tt",\n' +
+'    long date, short time pattern f: "dddd, MMMM dd, yyyy h:mm tt",\n' +
+'    long date, long time pattern F: "dddd, MMMM dd, yyyy h:mm:ss tt",\n' +
+'    month/day pattern M: "MMMM dd",\n' +
+'    month/year pattern Y: "yyyy MMMM"\n' +
+'    </div>\n'
+;
+
     // construct grid on "view" pages.
     if ($("#jqxgrid").length) {
         var data_source = $('#data_source').text(),
@@ -270,12 +294,16 @@ jQuery(function ($) {
                 {name: 'width', type: 'string'},
                 {name: 'cellsalign', type: 'string'},
                 {name: 'cellsformat', type: 'string'}
-
             ],
             [
                 {text: 'Title', datafield: 'text', width: 250 },
                 {text: 'Field Name', datafield: 'datafield', width: 250},
-                {text: 'Column Width', datafield: 'width', width: 80},
+                {
+                    text: 'Column Width',
+                    datafield: 'width',
+                    width: 100,
+                    cellsalign: 'right'
+                },
                 {
                     text: 'Align',
                     datafield: 'cellsalign',
@@ -290,7 +318,11 @@ jQuery(function ($) {
                     },
                     width: 80
                 },
-                {text: 'Format', datafield: 'cellsformat', width: 80}
+                {
+                    text: 'Format',
+                    datafield: 'cellsformat',
+                    width: 80,
+                }
             ],
             {
                 text: '',
@@ -325,6 +357,13 @@ jQuery(function ($) {
             });
         });
 
+        // insert format help and display toggle
+        $("#formfield-form-widgets-column_definition .formHelp")
+            .after(format_help);
+        $("#format_help_trigger").click(function (event) {
+            $("#format_help").slideToggle();
+            event.preventDefault()
+        });
 
     } // if on edit view
 
