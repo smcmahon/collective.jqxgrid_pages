@@ -44,4 +44,7 @@ Column definition::
     Title, title
     Body, body
 
+.. image:: grid_edit.png
+.. image:: grid_view.png
+
 
