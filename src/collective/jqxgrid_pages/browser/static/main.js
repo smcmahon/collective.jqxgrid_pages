@@ -208,7 +208,7 @@ jQuery(function ($) {
                             ddgrid.jqxGrid(
                                 'addrow',
                                 null,
-                                null_row
+                                null_row()
                             );
                         });
 
@@ -277,10 +277,12 @@ jQuery(function ($) {
                 },
                 {text: 'Mapping', datafield: 'mapping', width: 250}
             ],
-            {
-                name: '',
-                type: 'string',
-                mapping: ''
+            function () {
+                return {
+                    name: '',
+                    type: 'string',
+                    mapping: ''
+                };
             }
         );
 
@@ -324,10 +326,12 @@ jQuery(function ($) {
                     width: 80,
                 }
             ],
-            {
-                text: '',
-                datafield: '',
-                cellsalign: 'left'
+            function () {
+                return {
+                    text: '',
+                    datafield: '',
+                    cellsalign: 'left'
+                };
             }
         );
 
