@@ -1,7 +1,7 @@
 Changelog
 =========
 
-1.0b2 (unreleased)
+1.0b2 (2015-04-09)
 ------------------
 
 - Updating from 1.0b1 to 1.0b2 requires reinstallation.
@@ -16,8 +16,8 @@ Changelog
 
 - Creating new rows mutiple times would result in the same row repeated. Fixed. Fixes #1.
 
-1.0b1 2015-02-21
-----------------
+1.0b1 (2015-02-21)
+------------------
 
 - Initial release.
   [smcmahon]
