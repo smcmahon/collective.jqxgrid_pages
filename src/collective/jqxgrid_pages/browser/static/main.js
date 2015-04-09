@@ -1,31 +1,32 @@
 jQuery(function ($) {
 
-    var format_help =
-'    <div id="format_help_trigger" style="cursor:pointer"><a href="#">Format Help +/-</a></div>\n' +
-'    <div id="format_help" style="white-space:pre-wrap; display:none; font-weight:normal">' +
-'<strong>Number formats</strong>\n' +
-'    "d" - decimal numbers.\n' +
-'    "f" - floating-point numbers.\n' +
-'    "n" - integer numbers.\n' +
-'    "c" - currency numbers.\n' +
-'    "p" - percentage numbers.\n' +
-'For adding decimal places to the numbers, add a number after the formatting string.\n' +
-'For example: "c3" displays a number in this format $25.256\n' +
-'\n' +
-'<strong>Date formats</strong>\n' +
-'    short date pattern d: "M/d/yyyy",\n' +
-'    long date pattern D: "dddd, MMMM dd, yyyy",\n' +
-'    short time pattern t: "h:mm tt",\n' +
-'    long time pattern T: "h:mm:ss tt",\n' +
-'    long date, short time pattern f: "dddd, MMMM dd, yyyy h:mm tt",\n' +
-'    long date, long time pattern F: "dddd, MMMM dd, yyyy h:mm:ss tt",\n' +
-'    month/day pattern M: "MMMM dd",\n' +
-'    month/year pattern Y: "yyyy MMMM"\n' +
-'    </div>\n'
-;
+    var grid = $("#jqxgrid"),
+        format_help =
+            '    <div id="format_help_trigger" style="cursor:pointer"><a href="#">Format Help +/-</a></div>\n' +
+            '    <div id="format_help" style="white-space:pre-wrap; display:none; font-weight:normal">' +
+            '<strong>Number formats</strong>\n' +
+            '    "d" - decimal numbers.\n' +
+            '    "f" - floating-point numbers.\n' +
+            '    "n" - integer numbers.\n' +
+            '    "c" - currency numbers.\n' +
+            '    "p" - percentage numbers.\n' +
+            'For adding decimal places to the numbers, add a number after the formatting string.\n' +
+            'For example: "c3" displays a number in this format $25.256\n' +
+            '\n' +
+            '<strong>Date formats</strong>\n' +
+            '    short date pattern d: "M/d/yyyy",\n' +
+            '    long date pattern D: "dddd, MMMM dd, yyyy",\n' +
+            '    short time pattern t: "h:mm tt",\n' +
+            '    long time pattern T: "h:mm:ss tt",\n' +
+            '    long date, short time pattern f: "dddd, MMMM dd, yyyy h:mm tt",\n' +
+            '    long date, long time pattern F: "dddd, MMMM dd, yyyy h:mm:ss tt",\n' +
+            '    month/day pattern M: "MMMM dd",\n' +
+            '    month/year pattern Y: "yyyy MMMM"\n' +
+            '    </div>\n';
 
     // construct grid on "view" pages.
-    if ($("#jqxgrid").length) {
+
+    if (grid.length) {
         var data_source = $('#data_source').text(),
             data_type = $('#data_type').text().toLowerCase(),
             data_record = $('#data_record').text(),
@@ -36,6 +37,8 @@ jQuery(function ($) {
             initial_sort_field = $('#initial_sort_field').text(),
             sort_direction = $('#sort_direction').text(),
             group = $('#group').text() === 'True',
+            initial_filter = $('#initial_filter').text(),
+            filter_match = $('#filter_match').text(),
             data_spec,
             data_adapter,
             jqxgrid_options;
@@ -71,9 +74,29 @@ jQuery(function ($) {
             jqxgrid_options['groups'] = [initial_sort_field];
             jqxgrid_options['showgroupsheader'] = false;
         }
+        if (initial_filter) {
+            jqxgrid_options['filterable'] = true;
+            jqxgrid_options['ready'] = function () {
+                var filtergroup = new $.jqx.filter(),
+                    filtercondition = 'EQUAL';
+                    filter = filtergroup.createfilter(
+                        'stringfilter',
+                        filter_match,
+                        'EQUAL'
+                        );
+                filtergroup.addfilter(0, filter);
+                grid.jqxGrid(
+                    'addfilter',
+                    initial_filter,
+                    filtergroup
+                    );
+                grid.jqxGrid('applyfilters');
+            };
+        }
 
-        // The url mechanism for jsonp is not working (or I don't know how to
-        // use it).
+
+        // The url mechanism for jsonp is not working
+        // (or I don't know how to use it).
         // So, let's gather the remote data ourselves.
         // Since AJAX is async, we need to create the grid in the
         // success callback.
@@ -92,7 +115,7 @@ jQuery(function ($) {
                     }
                     data_adapter = new $.jqx.dataAdapter(data_spec);
                     jqxgrid_options['source'] = data_adapter;
-                    $("#jqxgrid").jqxGrid(jqxgrid_options);
+                    grid.jqxGrid(jqxgrid_options);
                     })
                 .fail(function( jqxhr, textStatus, error ) {
                     alert( "Request Failed: " + textStatus + ", " + error );
@@ -115,7 +138,7 @@ jQuery(function ($) {
                 data_spec['sortdirection'] = sort_direction;
             }
             jqxgrid_options['source'] = data_adapter;
-            $("#jqxgrid").jqxGrid(jqxgrid_options);
+            grid.jqxGrid(jqxgrid_options);
         }
 
         // export button callback
@@ -131,10 +154,12 @@ jQuery(function ($) {
     // Set up the edit form, using the nice jqwidgets
     // for data and column def and checkbox multiselect for options.
     if ($("#form-widgets-data_definition").length) {
-        var addGridForField;
+        var addGridForField,
+            form_widgets_data_type = $("#form-widgets-data_type");
 
         // toggle display of xml-specific fields
-        $("#form-widgets-data_type").change(function(event) {
+        // and change when data type changes
+        form_widgets_data_type.change(function(event) {
             var controls = $("#formfield-form-widgets-data_root, #formfield-form-widgets-data_record");
 
             if($("#form-widgets-data_type").val() === 'XML') {
@@ -143,6 +168,7 @@ jQuery(function ($) {
                 controls.fadeOut();
             }
         });
+        form_widgets_data_type.change();
 
         // function to build a grid field from a text field
         // and keep the text field updated.
@@ -153,8 +179,7 @@ jQuery(function ($) {
                 grid_id,
                 datafields,
                 columns,
-                null_row)
-        {
+                null_row) {
             var target,
                 target_value,
                 data,

@@ -26,31 +26,22 @@
   <element value="plone.app.content.interfaces.INameFromTitle"/>
   <element
      value="collective.dexteritytextindexer.behavior.IDexterityTextIndexer"/>
-  <element
-     value="plone.app.dexterity.behaviors.nextprevious.INextPreviousEnabled"/>
-  <element
-     value="plone.app.dexterity.behaviors.nextprevious.INextPreviousToggle"/>
  </property>
  <property name="schema"></property>
  <property
     name="model_source">&lt;model xmlns:i18n="http://xml.zope.org/namespaces/i18n" xmlns:security="http://namespaces.plone.org/supermodel/security" xmlns:marshal="http://namespaces.plone.org/supermodel/marshal" xmlns:form="http://namespaces.plone.org/supermodel/form" xmlns:indexer="http://namespaces.plone.org/supermodel/indexer" xmlns="http://namespaces.plone.org/supermodel/schema"&gt;
     &lt;schema&gt;
-      &lt;field name="prologue" type="plone.app.textfield.RichText"&gt;
-        &lt;description&gt;Displays before grid.&lt;/description&gt;
-        &lt;required&gt;False&lt;/required&gt;
-        &lt;title&gt;Prologue&lt;/title&gt;
-      &lt;/field&gt;
       &lt;field name="data_source" type="zope.schema.TextLine"&gt;
         &lt;description&gt;URL of the data source.&lt;/description&gt;
         &lt;title&gt;Data Source&lt;/title&gt;
       &lt;/field&gt;
       &lt;field name="data_type" type="zope.schema.Choice"&gt;
-        &lt;description&gt;
-            Type of the data supplied by the source.
-            Note that data from other servers may only be JSONP.
-        &lt;/description&gt;
-        &lt;title&gt;Data Type&lt;/title&gt;
         &lt;default&gt;XML&lt;/default&gt;
+        &lt;description&gt;
+  Type of the data supplied by the source.
+  Note that data from other servers may only be JSONP.
+  &lt;/description&gt;
+        &lt;title&gt;Data Type&lt;/title&gt;
         &lt;values&gt;
           &lt;element&gt;JSON&lt;/element&gt;
           &lt;element&gt;JSONP&lt;/element&gt;
@@ -61,79 +52,103 @@
       &lt;/field&gt;
       &lt;field name="data_definition" type="zope.schema.Text"&gt;
         &lt;description&gt;
-            Description of the incoming data.
-            For JSON sources, the field name should be the attribute
-            name for the field. For CSV and TSV, only the order matters.
-            Mappings are mainly useful for choosing XML properties.
-            See the jqxGrid documentation.
-        &lt;/description&gt;
+  Description of the incoming data.
+  For JSON sources, the field name should be the attribute
+  name for the field. For CSV and TSV, only the order matters.
+  Mappings are mainly useful for choosing XML properties.
+  See the jqxGrid documentation.
+  &lt;/description&gt;
         &lt;title&gt;Data Definition&lt;/title&gt;
       &lt;/field&gt;
       &lt;field name="data_root" type="zope.schema.TextLine"&gt;
         &lt;description&gt;Root tag for XML data.&lt;/description&gt;
-        &lt;title&gt;XML Root&lt;/title&gt;
         &lt;required&gt;False&lt;/required&gt;
+        &lt;title&gt;XML Root&lt;/title&gt;
       &lt;/field&gt;
       &lt;field name="data_record" type="zope.schema.TextLine"&gt;
         &lt;description&gt;Record tag for XML data.&lt;/description&gt;
-        &lt;title&gt;XML Record&lt;/title&gt;
         &lt;required&gt;False&lt;/required&gt;
+        &lt;title&gt;XML Record&lt;/title&gt;
       &lt;/field&gt;
       &lt;field name="column_definition" type="zope.schema.Text"&gt;
         &lt;description&gt;
-            Description of the columns to show on the grid.
-            Field names should match the data definition.
-            Column widths may be percentages or whole numbers.
-            Whole numbers are interpreted as pixels.
-        &lt;/description&gt;
+  Description of the columns to show on the grid.
+  Field names should match the data definition.
+  Column widths may be percentages or whole numbers.
+  Whole numbers are interpreted as pixels.
+  &lt;/description&gt;
         &lt;title&gt;Column Definition&lt;/title&gt;
       &lt;/field&gt;
-      &lt;field name="initial_sort_field" type="zope.schema.TextLine"&gt;
-        &lt;title&gt;Initial Sort Field&lt;/title&gt;
-        &lt;description&gt;
-            Field name of initial sort field. Leave empty for no initial sort.
-        &lt;/description&gt;
-        &lt;required&gt;False&lt;/required&gt;
-      &lt;/field&gt;
-      &lt;field name="sort_direction" type="zope.schema.Choice"&gt;
-        &lt;title&gt;Sort Direction&lt;/title&gt;
-        &lt;description/&gt;
-        &lt;values&gt;
-          &lt;element&gt;Ascending&lt;/element&gt;
-          &lt;element&gt;Descending&lt;/element&gt;
-        &lt;/values&gt;
-        &lt;default&gt;Ascending&lt;/default&gt;
-      &lt;/field&gt;
-      &lt;field name="group" type="zope.schema.Bool"&gt;
-        &lt;title&gt;Group?&lt;/title&gt;
-        &lt;description&gt;Group by initial sort field?&lt;/description&gt;
-        &lt;required&gt;False&lt;/required&gt;
-        &lt;form:widget type="z3c.form.browser.radio.RadioFieldWidget"/&gt;
-        &lt;default&gt;False&lt;/default&gt;
-      &lt;/field&gt;
-      &lt;field name="display_options" type="zope.schema.Set"&gt;
-        &lt;description&gt;
-            Optional features for the displayed grid.
-            Grids are fixed-height unless you choose 'Auto Height',
-            which adjusts to grid height to display all rows.
-        &lt;/description&gt;
-        &lt;required&gt;False&lt;/required&gt;
-        &lt;title&gt;Display Options&lt;/title&gt;
-        &lt;value_type type="zope.schema.Choice"&gt;
+      &lt;fieldset name="grid_options" label="Options"&gt;
+        &lt;field name="initial_sort_field" type="zope.schema.TextLine"&gt;
+          &lt;description&gt;
+  Field name of initial sort field. Leave empty for no initial sort.
+  &lt;/description&gt;
+          &lt;required&gt;False&lt;/required&gt;
+          &lt;title&gt;Initial Sort Field&lt;/title&gt;
+        &lt;/field&gt;
+        &lt;field name="sort_direction" type="zope.schema.Choice"&gt;
+          &lt;default&gt;Ascending&lt;/default&gt;
+          &lt;description/&gt;
+          &lt;title&gt;Sort Direction&lt;/title&gt;
           &lt;values&gt;
-            &lt;element&gt;Sortable columns&lt;/element&gt;
-            &lt;element&gt;Filterable columns&lt;/element&gt;
-            &lt;element&gt;Paged&lt;/element&gt;
-            &lt;element&gt;Exportable&lt;/element&gt;
-            &lt;element&gt;Auto Height&lt;/element&gt;
+            &lt;element&gt;Ascending&lt;/element&gt;
+            &lt;element&gt;Descending&lt;/element&gt;
           &lt;/values&gt;
-        &lt;/value_type&gt;
-      &lt;/field&gt;
-      &lt;field name="epilogue" type="plone.app.textfield.RichText"&gt;
-        &lt;description&gt;Displays after grid.&lt;/description&gt;
-        &lt;required&gt;False&lt;/required&gt;
-        &lt;title&gt;Epilogue&lt;/title&gt;
-      &lt;/field&gt;
+        &lt;/field&gt;
+        &lt;field name="group" type="zope.schema.Bool"&gt;
+          &lt;default&gt;False&lt;/default&gt;
+          &lt;description&gt;Group by initial sort field?&lt;/description&gt;
+          &lt;required&gt;False&lt;/required&gt;
+          &lt;title&gt;Group?&lt;/title&gt;
+          &lt;form:widget type="z3c.form.browser.radio.RadioFieldWidget"/&gt;
+        &lt;/field&gt;
+        &lt;field name="initial_filter" type="zope.schema.TextLine"&gt;
+          &lt;description&gt;
+  Name of the field on which you wish to filter.
+  Leave empty to skip filtering.
+  &lt;/description&gt;
+          &lt;required&gt;False&lt;/required&gt;
+          &lt;title&gt;Filter Field&lt;/title&gt;
+        &lt;/field&gt;
+        &lt;field name="filter_match" type="zope.schema.TextLine"&gt;
+          &lt;description&gt;
+  Value you wish to match. Not case-sensitive.
+  &lt;/description&gt;
+          &lt;required&gt;False&lt;/required&gt;
+          &lt;title&gt;Filter Match&lt;/title&gt;
+        &lt;/field&gt;
+        &lt;field name="display_options" type="zope.schema.Set"&gt;
+          &lt;description&gt;
+  Optional features for the displayed grid.
+  Grids are fixed-height unless you choose 'Auto Height',
+  which adjusts to grid height to display all rows.
+  &lt;/description&gt;
+          &lt;required&gt;False&lt;/required&gt;
+          &lt;title&gt;Display Options&lt;/title&gt;
+          &lt;value_type type="zope.schema.Choice"&gt;
+            &lt;values&gt;
+              &lt;element&gt;Sortable columns&lt;/element&gt;
+              &lt;element&gt;Filterable columns&lt;/element&gt;
+              &lt;element&gt;Paged&lt;/element&gt;
+              &lt;element&gt;Exportable&lt;/element&gt;
+              &lt;element&gt;Auto Height&lt;/element&gt;
+            &lt;/values&gt;
+          &lt;/value_type&gt;
+        &lt;/field&gt;
+      &lt;/fieldset&gt;
+      &lt;fieldset name="decoration" label="Decoration"&gt;
+        &lt;field name="prologue" type="plone.app.textfield.RichText"&gt;
+          &lt;description&gt;Displays before grid.&lt;/description&gt;
+          &lt;required&gt;False&lt;/required&gt;
+          &lt;title&gt;Prologue&lt;/title&gt;
+        &lt;/field&gt;
+        &lt;field name="epilogue" type="plone.app.textfield.RichText"&gt;
+          &lt;description&gt;Displays after grid.&lt;/description&gt;
+          &lt;required&gt;False&lt;/required&gt;
+          &lt;title&gt;Epilogue&lt;/title&gt;
+        &lt;/field&gt;
+      &lt;/fieldset&gt;
     &lt;/schema&gt;
   &lt;/model&gt;</property>
  <property name="model_file"></property>

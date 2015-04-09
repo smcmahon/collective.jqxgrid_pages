@@ -21,6 +21,8 @@
             <div id="sort_direction" tal:content="python:getattr(context, 'sort_direction', 'Ascending') == 'Ascending' and 'asc' or 'desc'" />
             <div id="group" tal:content="context/group | nothing" />
             <div id="display_options" tal:content="python:','.join(context.display_options)" />
+            <div id="initial_filter" tal:content="context/initial_filter | nothing" />
+            <div id="filter_match" tal:content="context/filter_match | nothing" />
         </div>
 
         <div tal:content="structure context/prologue/output | nothing" />

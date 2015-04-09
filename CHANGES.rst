@@ -4,6 +4,10 @@ Changelog
 1.0b2 (unreleased)
 ------------------
 
+- Add options and decoration fieldsets to edit mode to clean up forms.
+
+- Add option for "equals" filtering on a single field.
+
 - Add grouping option. Only works with a specified initial sort field.
 
 - Add option for specifying initial sort field and direction.
