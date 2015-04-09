@@ -19,7 +19,7 @@ long_description = (
 
 setup(
     name='collective.jqxgrid_pages',
-    version='1.0b1',
+    version='1.0b2',
     description="A datagrid content type that draws data from remote sources",
     long_description=long_description,
     # Get more from http://pypi.python.org/pypi?%3Aaction=list_classifiers

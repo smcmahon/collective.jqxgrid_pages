@@ -17,6 +17,9 @@
             <div id="data_root" tal:content="structure context/data_root" />
             <div id="data_record" tal:content="structure context/data_record" />
             <div id="column_definition" tal:content="structure context/column_definition" />
+            <div id="initial_sort_field" tal:content="context/initial_sort_field | nothing" />
+            <div id="sort_direction" tal:content="python:getattr(context, 'sort_direction', 'Ascending') == 'Ascending' and 'asc' or 'desc'" />
+            <div id="group" tal:content="context/group | nothing" />
             <div id="display_options" tal:content="python:','.join(context.display_options)" />
         </div>
 

@@ -88,6 +88,29 @@
         &lt;/description&gt;
         &lt;title&gt;Column Definition&lt;/title&gt;
       &lt;/field&gt;
+      &lt;field name="initial_sort_field" type="zope.schema.TextLine"&gt;
+        &lt;title&gt;Initial Sort Field&lt;/title&gt;
+        &lt;description&gt;
+            Field name of initial sort field. Leave empty for no initial sort.
+        &lt;/description&gt;
+        &lt;required&gt;False&lt;/required&gt;
+      &lt;/field&gt;
+      &lt;field name="sort_direction" type="zope.schema.Choice"&gt;
+        &lt;title&gt;Sort Direction&lt;/title&gt;
+        &lt;description/&gt;
+        &lt;values&gt;
+          &lt;element&gt;Ascending&lt;/element&gt;
+          &lt;element&gt;Descending&lt;/element&gt;
+        &lt;/values&gt;
+        &lt;default&gt;Ascending&lt;/default&gt;
+      &lt;/field&gt;
+      &lt;field name="group" type="zope.schema.Bool"&gt;
+        &lt;title&gt;Group?&lt;/title&gt;
+        &lt;description&gt;Group by initial sort field?&lt;/description&gt;
+        &lt;required&gt;False&lt;/required&gt;
+        &lt;form:widget type="z3c.form.browser.radio.RadioFieldWidget"/&gt;
+        &lt;default&gt;False&lt;/default&gt;
+      &lt;/field&gt;
       &lt;field name="display_options" type="zope.schema.Set"&gt;
         &lt;description&gt;
             Optional features for the displayed grid.

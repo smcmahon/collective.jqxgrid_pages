@@ -33,6 +33,9 @@ jQuery(function ($) {
             data_definition = $('#data_definition').text(),
             column_definition = $('#column_definition').text(),
             display_options = $('#display_options').text(),
+            initial_sort_field = $('#initial_sort_field').text(),
+            sort_direction = $('#sort_direction').text(),
+            group = $('#group').text() === 'True',
             data_spec,
             data_adapter,
             jqxgrid_options;
@@ -63,6 +66,11 @@ jQuery(function ($) {
             columnsresize: true,
             columns: column_definition
             };
+        if (group) {
+            jqxgrid_options['groupable'] = true;
+            jqxgrid_options['groups'] = [initial_sort_field];
+            jqxgrid_options['showgroupsheader'] = false;
+        }
 
         // The url mechanism for jsonp is not working (or I don't know how to
         // use it).
@@ -78,6 +86,10 @@ jQuery(function ($) {
                         datatype: 'json',
                         localdata: data
                         };
+                    if (initial_sort_field !== '') {
+                        data_spec['sortcolumn'] = initial_sort_field;
+                        data_spec['sortdirection'] = sort_direction;
+                    }
                     data_adapter = new $.jqx.dataAdapter(data_spec);
                     jqxgrid_options['source'] = data_adapter;
                     $("#jqxgrid").jqxGrid(jqxgrid_options);
@@ -98,6 +110,10 @@ jQuery(function ($) {
                 data_spec['record'] = data_record;
             }
             data_adapter = new $.jqx.dataAdapter(data_spec);
+            if (initial_sort_field !== '') {
+                data_spec['sortcolumn'] = initial_sort_field;
+                data_spec['sortdirection'] = sort_direction;
+            }
             jqxgrid_options['source'] = data_adapter;
             $("#jqxgrid").jqxGrid(jqxgrid_options);
         }
