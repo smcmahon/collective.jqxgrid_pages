@@ -4,6 +4,8 @@ Changelog
 1.0b2 (unreleased)
 ------------------
 
+- Updating from 1.0b1 to 1.0b2 requires reinstallation.
+
 - Add options and decoration fieldsets to edit mode to clean up forms.
 
 - Add option for "equals" filtering on a single field.
