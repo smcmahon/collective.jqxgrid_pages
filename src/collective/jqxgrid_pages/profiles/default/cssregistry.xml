@@ -28,6 +28,7 @@
     id="++resource++collective.jqxgrid_pages/jqwidgets/styles/jqx.base.css"
     media="screen" rel="stylesheet" rendering="import"
     cacheable="True" compression="safe" cookable="True"
+    applyPrefix="True"
     enabled="1" expression="python:context.restrictedTraverse('@@plone_interface_info').provides('collective.jqxgrid_pages.interfaces.IGridPage') or '++add++jqxgrid_page' in context.REQUEST.ACTUAL_URL" />
 
 </object>
