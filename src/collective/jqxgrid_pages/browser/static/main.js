@@ -66,6 +66,7 @@ jQuery(function ($) {
             filterable: display_options.search('Filter') >= 0,
             pageable: display_options.search('Paged') >= 0,
             autoheight: display_options.search('Height') >= 0,
+            autorowheight: display_options.search('Height') >= 0,
             columnsresize: true,
             columns: column_definition
             };
